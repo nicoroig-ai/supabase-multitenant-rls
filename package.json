@@ -1,0 +1,17 @@
+{
+  "name": "supabase-multitenant-rls",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pool multi-tenancy on Supabase/Postgres with Row Level Security, and the tests that prove the isolation holds.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "db:up": "docker run --rm -d --name mtrls -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres:16",
+    "db:down": "docker rm -f mtrls"
+  },
+  "license": "MIT",
+  "engines": { "node": ">=18" },
+  "devDependencies": {
+    "pg": "^8.13.1"
+  }
+}
