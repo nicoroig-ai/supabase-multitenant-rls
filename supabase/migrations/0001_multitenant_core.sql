@@ -125,6 +125,19 @@ grant select, insert, update, delete on public.notes to authenticated;
 -- deny-all policy below would stop it anyway, but a table nobody can reach is
 -- a smaller target than one protected by a policy somebody might edit.
 
+-- BYPASSRLS is not a privilege. It lets service_role skip the policies; it
+-- does not let it reach a table it was never granted. A hosted Supabase
+-- project already grants the public schema to service_role by default, so this
+-- gap only shows up the first time the schema runs somewhere else -- which is
+-- a poor moment to discover it. Grant explicitly and stay portable.
+grant usage on schema public to service_role;
+grant all privileges on all tables in schema public to service_role;
+grant all privileges on all sequences in schema public to service_role;
+
+-- And for tables added by later migrations.
+alter default privileges in schema public grant all on tables to service_role;
+alter default privileges in schema public grant all on sequences to service_role;
+
 -- ---------------------------------------------------------------------------
 -- Row Level Security
 -- ---------------------------------------------------------------------------

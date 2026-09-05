@@ -55,6 +55,8 @@ A table with RLS enabled and no matching policy returns zero rows and rejects ev
 
 The migration also declines to `GRANT` anything on that table. Belt and braces: a table nobody can reach is a smaller target than one protected by a policy somebody might edit.
 
+The mirror image is worth knowing too: **`BYPASSRLS` is not a privilege**. It lets `service_role` skip the policies; it does not let it reach a table it was never granted. A hosted Supabase project grants the public schema to `service_role` by default, so a migration that relies on that silently stops working the first time it runs anywhere else. This one grants explicitly — a fact CI discovered on the first run, by failing.
+
 ### 3. `USING` without `WITH CHECK` is a silent cross-tenant write
 
 ```sql
